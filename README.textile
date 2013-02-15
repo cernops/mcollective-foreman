@@ -1,0 +1,16 @@
+h1. Foreman-mcollective
+
+h3. An mcollective discovery plugin that finds information about your nodes in Foreman.
+
+h2. Settings
+This includes a puppet module to configure the plugin depending on your foreman
+settings and certificates. You can also take the file in templates/foreman.rb.erb 
+and modify it yourself and use it as a standalone, non-puppetized plugin.
+
+h2. Usage
+
+Fetch hosts in a sample condition
+<pre> $ mco xxxxx --dm=foreman --do='hostgroup = samplehostgroup' </pre>
+
+Fetch hosts given several conditions 
+<pre> $ mco xxxxx --dm=foreman --do='params.owner = owner1 AND ip=127.0.0.1' </pre>
