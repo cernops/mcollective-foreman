@@ -1,6 +1,6 @@
 h1. Foreman-mcollective
 
-h3. An mcollective discovery plugin that finds information about your nodes in Foreman.
+h3. A mcollective discovery plugin that finds information about your nodes in Foreman.
 
 h2. Settings
 
@@ -10,7 +10,7 @@ and modify it yourself and use it as a standalone, non-puppetized plugin.
 
 h2. Usage
 
-Fetch hosts in a sample condition
+Fetch hosts given a sample condition
 <pre> $ mco xxxxx --dm=foreman --do='hostgroup = samplehostgroup' </pre>
 
 Fetch hosts given several conditions 
