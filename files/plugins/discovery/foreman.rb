@@ -8,7 +8,7 @@ module MCollective
       attr_reader :res
 
       SETTINGS = {
-        :url          => '<%= @foreman_url %>',
+        :url          => Config.instance.pluginconf["foreman.url"]
         :puppetdir    => '/var/lib/puppet',
         :facts        => true,
         :timeout      => 7,
@@ -16,8 +16,8 @@ module MCollective
         # if CA is specified, remote Foreman host will be verified 
         :ssl_ca       => "/var/lib/puppet/ssl/certs/ca.pem",
         # ssl_cert and key are required if require_ssl_puppetmasters is enabled in Foreman 
-        :ssl_cert     => "/var/lib/puppet/ssl/certs/<%= @fqdn %>.pem",
-        :ssl_key      => "/var/lib/puppet/ssl/private_keys/<%= @fqdn %>.pem"
+        :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"],
+        :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"]
       }
 
       def self.discover(filter, timeout, limit=0, client=nil)
