@@ -16,8 +16,8 @@ module MCollective
         # if CA is specified, remote Foreman host will be verified 
         :ssl_ca       => "/var/lib/puppet/ssl/certs/ca.pem",
         # ssl_cert and key are required if require_ssl_puppetmasters is enabled in Foreman 
-        :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"],
-        :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"]
+        :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"] || "",
+        :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"] || ""
       }
 
       def self.discover(filter, timeout, limit=0, client=nil)
@@ -77,7 +77,7 @@ module MCollective
         else
           @res.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
-        if SETTINGS[:ssl_cert] and SETTINGS[:ssl_key]
+        if File.exists?(SETTINGS[:ssl_cert]) && File.exists?(SETTINGS[:ssl_key])
           @res.cert = OpenSSL::X509::Certificate.new(File.read(SETTINGS[:ssl_cert]))
           @res.key  = OpenSSL::PKey::RSA.new(File.read(SETTINGS[:ssl_key]), nil)
         end
