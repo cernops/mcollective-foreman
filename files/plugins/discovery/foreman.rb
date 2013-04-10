@@ -60,12 +60,15 @@ module MCollective
       end
 
       def self.authenticate_user
-        puts "Username: "
+        fd = IO.sysopen "/dev/tty", "w"
+        ios = IO.new(fd, "w")
+        ios.puts "Username: "
         username = gets.chomp
-        puts "Password: "
-        system `stty -echo` 
+        ios.puts "Password: "
+        system `stty -echo`
         password = gets.chomp
-        system `stty echo` 
+        system `stty echo`
+        ios.close
 
         { :login => username, :password => password }
       end
