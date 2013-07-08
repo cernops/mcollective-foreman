@@ -8,7 +8,7 @@ module MCollective
       attr_reader :res
 
       SETTINGS = {
-        :url          => Config.instance.pluginconf["foreman.url"]
+        :url          => Config.instance.pluginconf["foreman.url"],
         :puppetdir    => '/var/lib/puppet',
         :facts        => true,
         :timeout      => 7,
