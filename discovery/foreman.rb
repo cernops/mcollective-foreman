@@ -62,6 +62,7 @@ module MCollective
         req = HTTPI::Request.new()
         req.auth.ssl.verify_mode = :none
         req.auth.gssnegotiate
+        HTTPI.log = false
         HTTPI.adapter = :curb
         req.url = URI.escape("#{SETTINGS[:url]}/api/hosts?search=#{options}&per_page=9999999")
         begin
