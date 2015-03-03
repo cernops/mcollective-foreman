@@ -1,0 +1,5 @@
+2015-03-03 Release 0.6
+Summary:
+
+ Removes some spourios output from the curb backend when using kerberos.
+
