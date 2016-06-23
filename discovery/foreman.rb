@@ -21,11 +21,20 @@ module MCollective
         # ssl_cert and key are required if require_ssl_puppetmasters is enabled in Foreman 
         :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"] || "",
         :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"] || "",
-        :krb          => Config.instance.pluginconf["foreman.use_krb"] || ""
+        :krb          => Config.instance.pluginconf["foreman.use_krb"] || "",
+        :collective_fact => Config.instance.pluginconf["foreman.collective_fact"] || "",
       }
 
       def self.discover(filter, timeout, limit=0, client=nil)
         options = client.options[:discovery_options].first
+        unless SETTINGS[:collective_fact].empty?
+            collective_fact_query = SETTINGS[:collective_fact] + '==' + client.options[:collective]
+            if options.nil?
+                options = collective_fact_query
+            else
+                options = options + ' AND ' + collective_fact_query
+            end
+        end
         get(options).flatten
       end
 

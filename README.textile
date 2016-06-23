@@ -7,9 +7,12 @@ h2. Settings
 This repository includes the bare minimum files to make a foreman discovery plugin work.
 Normally you would set up the foreman url and certificates with puppet using the 
 template provided in templates/config.cfg.erb. 
-You may use Kerberized access to foreman by setting plugin.foreman.use_krb to 1 or true in the config file.
 You can also take that file, modify it yourself, put it in /etc/mcollective/client.cfg  
 and use it as a standalone, non-puppetized plugin.
+You may use Kerberized access to foreman by setting plugin.foreman.use_krb to 1 or true in the config file.
+You may add plugin.foreman.collective_fact to define a foreman element to filter all queries with the value of the collective
+thus avoiding to fetch all the nodes registered in foreman each time. For instance, it may be set to parent_hostgroup,
+or to facts.hostgroup_0 for the hostgroup_0 fact.
 
 h2. Usage
 
