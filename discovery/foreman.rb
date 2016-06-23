@@ -52,7 +52,7 @@ module MCollective
             response = @res.start { |http| http.request(req) }
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOST
+        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -70,7 +70,7 @@ module MCollective
             response = HTTPI.get(req)
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOST
+        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -81,7 +81,7 @@ module MCollective
         when 200
           JSON.parse(response.raw_body).map { |host| host['host']['name'] }
         when 401
-          puts "Username/password are wrong" 
+          puts "Not authorized"
           exit(1)
         when 403
           puts "Bad request"
