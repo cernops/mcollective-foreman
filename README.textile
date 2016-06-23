@@ -21,3 +21,6 @@ Fetch hosts given a sample condition
 
 Fetch hosts given several conditions 
 <pre> $ mco xxxxx --dm=foreman --do='params.owner = owner1 AND ip=127.0.0.1' </pre>
+
+You can now also use -F in the command line to add additional filtering using facts. For instance
+<pre> $ mco xxxxx -F is_virtual=true -F operatingsystem=CentOS --dm=foreman --do='params.owner = owner1 AND ip=127.0.0.1' </pre>

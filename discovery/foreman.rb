@@ -27,6 +27,16 @@ module MCollective
 
       def self.discover(filter, timeout, limit=0, client=nil)
         options = client.options[:discovery_options].first
+        if filter.has_key?('fact')
+            filter['fact'].each do |fact|
+                 fact_query = 'facts.' + fact[:fact] + fact[:operator] + fact[:value]
+                 if options.nil?
+                     options = fact_query
+                 else
+                     options = options + ' AND ' + fact_query
+                 end
+             end
+        end
         unless SETTINGS[:collective_fact].empty?
             collective_fact_query = SETTINGS[:collective_fact] + '==' + client.options[:collective]
             if options.nil?
