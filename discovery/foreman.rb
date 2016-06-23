@@ -21,11 +21,30 @@ module MCollective
         # ssl_cert and key are required if require_ssl_puppetmasters is enabled in Foreman 
         :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"] || "",
         :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"] || "",
-        :krb          => Config.instance.pluginconf["foreman.use_krb"] || ""
+        :krb          => Config.instance.pluginconf["foreman.use_krb"] || "",
+        :collective_fact => Config.instance.pluginconf["foreman.collective_fact"] || "",
       }
 
       def self.discover(filter, timeout, limit=0, client=nil)
         options = client.options[:discovery_options].first
+        if filter.has_key?('fact')
+            filter['fact'].each do |fact|
+                 fact_query = 'facts.' + fact[:fact] + fact[:operator] + fact[:value]
+                 if options.nil?
+                     options = fact_query
+                 else
+                     options = options + ' AND ' + fact_query
+                 end
+             end
+        end
+        unless SETTINGS[:collective_fact].empty?
+            collective_fact_query = SETTINGS[:collective_fact] + '==' + client.options[:collective]
+            if options.nil?
+                options = collective_fact_query
+            else
+                options = options + ' AND ' + collective_fact_query
+            end
+        end
         get(options).flatten
       end
 
@@ -52,7 +71,7 @@ module MCollective
             response = @res.start { |http| http.request(req) }
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOST
+        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -70,7 +89,7 @@ module MCollective
             response = HTTPI.get(req)
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOST
+        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -81,7 +100,7 @@ module MCollective
         when 200
           JSON.parse(response.raw_body).map { |host| host['host']['name'] }
         when 401
-          puts "Username/password are wrong" 
+          puts "Not authorized"
           exit(1)
         when 403
           puts "Bad request"

@@ -7,5 +7,5 @@ metadata    :name        => "foreman",
             :timeout     => 0 
  
 discovery do 
-    capabilities :identity 
+    capabilities [:identity, :facts]
 end
