@@ -17,7 +17,7 @@ module MCollective
         :timeout      => 7,
         :storeconfigs => false,
         # if CA is specified, remote Foreman host will be verified 
-        :ssl_ca       => "/var/lib/puppet/ssl/certs/ca.pem",
+        :ssl_ca       => Config.instance.pluginconf["foreman.ssl_ca"] || "/var/lib/puppet/ssl/certs/ca.pem",
         # ssl_cert and key are required if require_ssl_puppetmasters is enabled in Foreman 
         :ssl_cert     => Config.instance.pluginconf["foreman.ssl_cert"] || "",
         :ssl_key      => Config.instance.pluginconf["foreman.ssl_key"] || "",
