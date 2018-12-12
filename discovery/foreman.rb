@@ -98,7 +98,7 @@ module MCollective
       def self.handle_response(response)
         case response.code.to_i
         when 200
-          JSON.parse(response.raw_body).map { |host| host['host']['name'] }
+          JSON.parse(response.raw_body)["results"].map { |host| host['name'] }
         when 401
           puts "Not authorized"
           exit(1)
