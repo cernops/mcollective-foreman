@@ -67,11 +67,11 @@ module MCollective
         @res.use_ssl = uri.scheme == 'https'
         setup_ssl_certs if @res.use_ssl?
         begin
-          timeout(SETTINGS[:timeout]) do
+          Timeout::timeout(SETTINGS[:timeout]) do
             response = @res.start { |http| http.request(req) }
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
+        rescue Timeout::Error, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -85,11 +85,11 @@ module MCollective
         HTTPI.adapter = :curb
         req.url = URI.escape("#{SETTINGS[:url]}/api/hosts?search=#{options}&per_page=9999999")
         begin
-          timeout(SETTINGS[:timeout]) do
+          Timeout::timeout(SETTINGS[:timeout]) do
             response = HTTPI.get(req)
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
+        rescue Timeout::Error, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
