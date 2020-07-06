@@ -67,11 +67,11 @@ module MCollective
         @res.use_ssl = uri.scheme == 'https'
         setup_ssl_certs if @res.use_ssl?
         begin
-          timeout(SETTINGS[:timeout]) do
+          Timeout::timeout(SETTINGS[:timeout]) do
             response = @res.start { |http| http.request(req) }
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
+        rescue Timeout::Error, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -85,11 +85,11 @@ module MCollective
         HTTPI.adapter = :curb
         req.url = URI.escape("#{SETTINGS[:url]}/api/hosts?search=#{options}&per_page=9999999")
         begin
-          timeout(SETTINGS[:timeout]) do
+          Timeout::timeout(SETTINGS[:timeout]) do
             response = HTTPI.get(req)
             handle_response response
           end
-        rescue TimeoutError, SocketError, Errno::EHOSTDOWN
+        rescue Timeout::Error, SocketError, Errno::EHOSTDOWN
           puts "Request timed out"
         end
 
@@ -98,7 +98,7 @@ module MCollective
       def self.handle_response(response)
         case response.code.to_i
         when 200
-          JSON.parse(response.raw_body).map { |host| host['host']['name'] }
+          JSON.parse(response.raw_body)["results"].map { |host| host['name'] }
         when 401
           puts "Not authorized"
           exit(1)
